@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.app.dao.AccountMapper">
+<resultMap id="BaseAccountResult" type="com.app.pojo.Account">
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="accountPassword" property="accountPassword" jdbcType="VARCHAR" />
+    <result column="accountInfo" property="accountInfo" jdbcType="VARCHAR" />
+</resultMap>
+    <sql id="Base_Column_List" >
+        id, account, accountPassword, accountInfo
+    </sql>
+    <select id="getAllAccounts" resultType="com.app.pojo.Account">
+        select
+        <include refid="Base_Column_List" />
+        from account
+    </select>
+    <insert id="addAccount" keyProperty="id" parameterType="com.app.pojo.Account">
+        insert into account
+        <include refid="Base_Column_List" />
+        values(#{id,jdbcType=Integer},#{account,jdbcType=VARCHAR},#{accountPassword,jdbcType=VARCHAR},#{accountInfo,jdbcType=VARCHAR})
+    </insert>
+    <update id="updateAccount" keyProperty="id" parameterType="com.app.pojo.Account">
+            update account
+            <set >
+                <if test="account != null" >
+                    user_name = #{account,jdbcType=VARCHAR},
+                </if>
+                <if test="accountPassword != null" >
+                    password = #{accountPassword,jdbcType=VARCHAR},
+                </if>
+                <if test="accountInfo != null" >
+                    age = #{accountInfo,jdbcType=VARCHAR},
+                </if>
+            </set>
+            where id = #{id,jdbcType=INTEGER}
+    </update>
+    <delete id="deleteAccount"  parameterType="Integer">
+        DELETE  from account WHERE id=#{id,jdbcType=INTEGER}
+    </delete>
+</mapper>
